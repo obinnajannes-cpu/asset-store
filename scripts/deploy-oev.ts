@@ -1,10 +1,22 @@
 import { network } from "hardhat";
+import { getGasPricingOrDefault } from "./gas-utils.js";
 
 const { viem } = await network.create();
+const publicClient = await viem.getPublicClient();
 
 console.log("Deploying OEV token...");
 
-const oev = await viem.deployContract("OEV");
+const gasPricing = await getGasPricingOrDefault(publicClient);
+console.log("Gas pricing used:", gasPricing);
+
+const deployConfig = gasPricing.gasPrice
+  ? { gasPrice: gasPricing.gasPrice }
+  : {
+      maxFeePerGas: gasPricing.maxFeePerGas,
+      maxPriorityFeePerGas: gasPricing.maxPriorityFeePerGas,
+    };
+
+const oev = await viem.deployContract("OEV", [], deployConfig);
 
 console.log(`OEV deployed at: ${oev.address}`);
 console.log("Token name:", await oev.read.name());

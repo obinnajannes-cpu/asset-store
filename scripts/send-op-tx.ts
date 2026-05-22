@@ -1,4 +1,5 @@
 import { network } from "hardhat";
+import { getGasPricingOrDefault } from "./gas-utils.js";
 
 const { viem } = await network.create({
   network: "hardhatOp",
@@ -20,10 +21,17 @@ const l1Gas = await publicClient.estimateL1Gas({
 
 console.log("Estimated L1 gas:", l1Gas);
 
+const gasPricing = await getGasPricingOrDefault(publicClient);
+console.log("Gas pricing used:", gasPricing);
+
 console.log("Sending L2 transaction");
 const tx = await senderClient.sendTransaction({
   to: senderClient.account.address,
   value: 1n,
+  ...(gasPricing.gasPrice ? { gasPrice: gasPricing.gasPrice } : {
+    maxFeePerGas: gasPricing.maxFeePerGas,
+    maxPriorityFeePerGas: gasPricing.maxPriorityFeePerGas,
+  }),
 });
 
 await publicClient.waitForTransactionReceipt({ hash: tx });

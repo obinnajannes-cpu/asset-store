@@ -76,6 +76,25 @@ Or for Sepolia:
 npx hardhat ignition deploy --network sepolia ignition/modules/OEV.ts
 ```
 
+## Deploy using Remix + MetaMask (recommended for quick Sepolia deploy)
+
+1. Open [asset-store/remix/OEV_for_remix.sol](remix/OEV_for_remix.sol) or the flattened file [asset-store/flattened/OEV_flattened.sol](flattened/OEV_flattened.sol) in Remix.
+2. In Remix Settings → Compiler, select `0.8.28` and match optimization settings (the contract uses default optimization off).
+3. In the Deploy & Run panel, choose `Injected Provider - MetaMask` and switch MetaMask to the Sepolia network.
+4. Deploy the contract; MetaMask will prompt to confirm the transaction. After mining, copy the deployed contract address from Remix.
+
+## Verify on Etherscan (Sepolia)
+
+1. Go to https://sepolia.etherscan.io and open the contract address page.
+2. Click `Contract` → `Verify and Publish`.
+3. Choose `Single file (flattened)` and paste the contents of `flattened/OEV_flattened.sol`.
+4. Select compiler version `0.8.28` and license `MIT`, then submit. Etherscan will compile and verify.
+
+Notes:
+- The flattened file already inlines OpenZeppelin dependencies to simplify verification: [flattened/OEV_flattened.sol](flattened/OEV_flattened.sol).
+- You can also deploy via Hardhat Ignition using `npm run deploy:oev:sepolia` after setting `SEPOLIA_RPC_URL` and `SEPOLIA_PRIVATE_KEY` in `asset-store/.env`.
+
+
 ### Add OEV to MetaMask
 
 1. Copy the deployed contract address from the deploy command output.
@@ -117,7 +136,9 @@ npm run deploy:oev:local
 
 ### Deploy to Sepolia
 
-If you want to deploy to Sepolia, set the environment variables first:
+If you want to deploy to Sepolia, set the environment variables first.
+
+> Make sure your Infura endpoint is a complete URL, including `https://` and your project ID.
 
 ```bash
 export SEPOLIA_RPC_URL="https://sepolia.infura.io/v3/YOUR_PROJECT_ID"
@@ -132,10 +153,12 @@ npm run deploy:oev:sepolia
 
 After deployment, copy the address and add the token in MetaMask on the Sepolia network.
 
-Instead of exporting variables each session, you can create a `.env` file in the project root. Copy the example file:
+Instead of exporting variables each session, you can create a `.env` file in the project root. Copy the example file and fill in your values locally:
 
 ```bash
 cp .env.example .env
 # edit .env and fill in your values
 ```
+
+> Do not paste your private key into chat or commit it to source control.
 
