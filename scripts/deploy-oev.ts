@@ -1,5 +1,5 @@
 import { network } from "hardhat";
-import { getGasPricingOrDefault } from "./gas-utils.js";
+import { getGasPricingOrDefault } from "./gas-utils.ts";
 
 const { viem } = await network.create();
 const publicClient = await viem.getPublicClient();
