@@ -13,7 +13,6 @@ const getEnvVar = (name: string): string => {
 };
 
 export default defineConfig({
-  defaultNetwork: "sepolia",
   plugins: [hardhatToolboxViemPlugin],
   solidity: {
     profiles: {
@@ -39,6 +38,14 @@ export default defineConfig({
     hardhatOp: {
       type: "edr-simulated",
       chainType: "op",
+    },
+    localhost: {
+      type: "http",
+      chainType: "l1",
+      url: process.env.LOCALHOST_RPC_URL ?? "http://127.0.0.1:8545",
+      accounts: process.env.SEPOLIA_PRIVATE_KEY
+        ? [process.env.SEPOLIA_PRIVATE_KEY]
+        : undefined,
     },
     sepolia: {
       type: "http",

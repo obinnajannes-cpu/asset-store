@@ -13,8 +13,12 @@ const main = async () => {
   const { viem } = await network.create();
   const publicClient = await viem.getPublicClient();
 
-  const accounts = await publicClient.request({ method: 'eth_accounts', params: [] });
-  const from = accounts?.[0];
+  const [senderClient] = await viem.getWalletClients();
+  if (!senderClient) {
+    throw new Error('No wallet client available for gas estimation.');
+  }
+
+  const from = senderClient.account.address;
 
   const gas = await publicClient.estimateGas({
     account: from,
