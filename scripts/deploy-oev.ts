@@ -2,7 +2,7 @@ import "dotenv/config";
 import fs from "node:fs";
 import path from "node:path";
 import { network } from "hardhat";
-import { getGasPricingOrDefault } from "./gas-utils.ts";
+import { getGasPricingOrDefault } from "./gas-utils";
 
 const getEnvVar = (name: string): string => {
   const value = process.env[name];
